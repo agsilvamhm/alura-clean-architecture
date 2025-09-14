@@ -15,3 +15,44 @@ App de simulação de um site para venda de ingressos de eventos diversos
 
 
 # alura-clean-architecture
+
+```mermaid
+graph TD
+subgraph "Infra - Controller"
+A[POST /usuarios com UsuarioDto] --> B(UsuarioController);
+end
+
+    subgraph "Application - Use Cases"
+        B -- Chama --> C(CriarUsuario);
+    end
+
+    subgraph "Domain - Entities"
+        C -- Cria --> D[new Usuario(...)];
+    end
+
+    subgraph "Application - Gateways"
+        C -- Chama o método cadastrarUsuario --> E(RepositorioDeUsuario);
+    end
+
+    subgraph "Infra - Gateways/Persistence"
+        E -- Implementado por --> F(RepositorioDeUsuarioJpa);
+        F -- Converte Usuario para UsuarioEntity --> G(UsuarioEntityMapper);
+        F -- Usa --> H(UsuarioRepository);
+        H -- Salva no Banco de Dados --> I[(Banco de Dados)];
+    end
+
+    subgraph "Retorno do Fluxo"
+        I -- Retorna UsuarioEntity salvo --> H;
+        H -- Retorna para --> F;
+        F -- Converte UsuarioEntity para Usuario --> G;
+        G -- Retorna Usuario para --> F;
+        F -- Retorna Usuario salvo para --> C;
+        C -- Retorna Usuario salvo para --> B;
+        B -- Converte Usuario para UsuarioDto e retorna --> J{200 OK com UsuarioDto};
+    end
+
+    style B fill:#f9f,stroke:#333,stroke-width:2px
+    style C fill:#ccf,stroke:#333,stroke-width:2px
+    style E fill:#ccf,stroke:#333,stroke-width:2px
+
+```
