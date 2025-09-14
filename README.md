@@ -18,16 +18,16 @@ App de simulação de um site para venda de ingressos de eventos diversos
 
 ```mermaid
 graph TD
-subgraph "Infra - Controller"
-A[POST /usuarios com UsuarioDto] --> B(UsuarioController);
-end
+    subgraph "Infra - Controller"
+        A[POST /usuarios com UsuarioDto] --> B(UsuarioController);
+    end
 
     subgraph "Application - Use Cases"
         B -- Chama --> C(CriarUsuario);
     end
 
     subgraph "Domain - Entities"
-        C -- Cria --> D[new Usuario(...)];
+        C -- Cria --> D["new Usuario(...)"];
     end
 
     subgraph "Application - Gateways"
